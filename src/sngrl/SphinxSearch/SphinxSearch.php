@@ -205,12 +205,12 @@ class SphinxSearch
                 // Get results' id's and query the database.
                 $matchids = array_keys($result['matches']);
                 $idString = implode(',', $matchids);
-                $config = isset($this->_config['mapping']) ? $this->_config['mapping']
+                $config = isset($this->_config['mapping']) && $this->_config['mapping']
+                    ? $this->_config['mapping']
                     : $this->_config[$this->_index_name];
 
-		// Get the model primary key column name    
-		$primaryKey = isset($config['primaryKey']) ? $config['primaryKey'] : 'id';
-		    
+                // Get the model primary key column name
+                $primaryKey = isset($config['primaryKey']) ? $config['primaryKey'] : 'id';
                 if ($config) {
                     if (isset($config['repository'])) {
                         $result = call_user_func_array($config['repository'] . '::findInRange',
@@ -287,7 +287,7 @@ class SphinxSearch
     {
         if (count($result) > 0) {
             foreach ($result as $k => $result_item) {
-                if ($result_item->id == $id) {
+                if (isset($result_item->id) && $result_item->id == $id) {
                     return $k;
                 }
             }
